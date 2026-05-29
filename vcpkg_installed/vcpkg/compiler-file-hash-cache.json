@@ -1,0 +1,14 @@
+{
+  "C:/msys64/mingw64/bin/x86_64-w64-mingw32-g++.exe" : 
+  {
+    "hash" : "f09b5382ea9ed5894598f48fd996fdf624bbe12b",
+    "size" : 2933833,
+    "timestamp" : 1740561007
+  },
+  "C:/msys64/mingw64/bin/x86_64-w64-mingw32-gcc.exe" : 
+  {
+    "hash" : "c068f45abc2d49a4e13dc9081186b4a2435a1645",
+    "size" : 2931273,
+    "timestamp" : 1740561007
+  }
+}

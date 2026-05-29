@@ -1,0 +1,29 @@
+ok all the phases of the project are there in the screenshort and 
+
+phase 1 is done : 
+
+this is what I build :
+✓ Full directory structure
+✓ MSVC 19.51 compiler working
+✓ vcpkg managing 10 packages
+✓ CMake + Ninja build system configured
+✓ models.hpp — all data structures
+✓ arena.cpp — memory management
+✓ humanize.cpp — formatting utilities
+✓ 13/13 tests passing
+✓ Binary compiles and runs
+✓ clangd working
+
+
+11:24 AM
+Phase 2 — The Core Engine
+What you're building:
+
+thread_pool — manages worker threads for parallel directory scanning
+progress — lock-free progress reporting from scanner to UI
+scanner — the filesystem walker, the heart of the whole project
+builder — rolls up sizes, sorts children, computes percentages
+index — flat queryable structure over the tree
+treemap — squarified layout algorithm
+Why this order: thread_pool and progress are utilities the scanner depends on. Scanner produces the raw tree. Builder makes it useful. Index makes it queryable. Treemap is pure algorithm, no dependencies.
+

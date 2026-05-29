@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "CMakeFiles\\disktree.dir\\src\\main.cpp.obj",
+            "outputs": [
+                "D:\\disktree\\build\\dev\\vc140.pdb",
+                "CMakeFiles\\disktree.dir\\src\\main.cpp.obj.ddi"
+            ],
+            "requires": []
+        }
+    ]
+}

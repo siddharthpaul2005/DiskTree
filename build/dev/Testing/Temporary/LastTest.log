@@ -1,0 +1,263 @@
+Start testing: May 29 11:19 India Standard Time
+----------------------------------------------------------
+1/13 Testing: format_count: thousands
+1/13 Test: format_count: thousands
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_count: thousands"
+Directory: D:/disktree/build/dev/tests
+"format_count: thousands" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_count: thousands"
+Randomness seeded to: 1472879979
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_count: thousands" end time: May 29 11:19 India Standard Time
+"format_count: thousands" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/13 Testing: format_bytes: zero
+2/13 Test: format_bytes: zero
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: zero"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: zero" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: zero"
+Randomness seeded to: 3958320205
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: zero" end time: May 29 11:19 India Standard Time
+"format_bytes: zero" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/13 Testing: format_duration: minutes
+3/13 Test: format_duration: minutes
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_duration: minutes"
+Directory: D:/disktree/build/dev/tests
+"format_duration: minutes" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_duration: minutes"
+Randomness seeded to: 2042904190
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_duration: minutes" end time: May 29 11:19 India Standard Time
+"format_duration: minutes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/13 Testing: format_count: small numbers no commas
+4/13 Test: format_count: small numbers no commas
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_count: small numbers no commas"
+Directory: D:/disktree/build/dev/tests
+"format_count: small numbers no commas" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_count: small numbers no commas"
+Randomness seeded to: 1289467093
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_count: small numbers no commas" end time: May 29 11:19 India Standard Time
+"format_count: small numbers no commas" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/13 Testing: format_bytes: exact KB boundary
+5/13 Test: format_bytes: exact KB boundary
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: exact KB boundary"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: exact KB boundary" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: exact KB boundary"
+Randomness seeded to: 642495064
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: exact KB boundary" end time: May 29 11:19 India Standard Time
+"format_bytes: exact KB boundary" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/13 Testing: format_bytes: megabytes
+6/13 Test: format_bytes: megabytes
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: megabytes"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: megabytes" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: megabytes"
+Randomness seeded to: 2721129472
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: megabytes" end time: May 29 11:19 India Standard Time
+"format_bytes: megabytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/13 Testing: format_duration: sub-minute
+7/13 Test: format_duration: sub-minute
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_duration: sub-minute"
+Directory: D:/disktree/build/dev/tests
+"format_duration: sub-minute" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_duration: sub-minute"
+Randomness seeded to: 2717201396
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"format_duration: sub-minute" end time: May 29 11:19 India Standard Time
+"format_duration: sub-minute" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/13 Testing: format_bytes: terabytes
+8/13 Test: format_bytes: terabytes
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: terabytes"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: terabytes" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: terabytes"
+Randomness seeded to: 3738682294
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: terabytes" end time: May 29 11:19 India Standard Time
+"format_bytes: terabytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/13 Testing: format_pct: normal values
+9/13 Test: format_pct: normal values
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_pct: normal values"
+Directory: D:/disktree/build/dev/tests
+"format_pct: normal values" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_pct: normal values"
+Randomness seeded to: 344229070
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_pct: normal values" end time: May 29 11:19 India Standard Time
+"format_pct: normal values" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/13 Testing: format_bytes: under 1KB stays in bytes
+10/13 Test: format_bytes: under 1KB stays in bytes
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: under 1KB stays in bytes"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: under 1KB stays in bytes" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: under 1KB stays in bytes"
+Randomness seeded to: 2397287766
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: under 1KB stays in bytes" end time: May 29 11:19 India Standard Time
+"format_bytes: under 1KB stays in bytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/13 Testing: format_pct: clamps out-of-range
+11/13 Test: format_pct: clamps out-of-range
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_pct: clamps out-of-range"
+Directory: D:/disktree/build/dev/tests
+"format_pct: clamps out-of-range" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_pct: clamps out-of-range"
+Randomness seeded to: 2828813426
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_pct: clamps out-of-range" end time: May 29 11:19 India Standard Time
+"format_pct: clamps out-of-range" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/13 Testing: format_bytes: fractional KB
+12/13 Test: format_bytes: fractional KB
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: fractional KB"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: fractional KB" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: fractional KB"
+Randomness seeded to: 3890359466
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: fractional KB" end time: May 29 11:19 India Standard Time
+"format_bytes: fractional KB" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/13 Testing: format_bytes: gigabytes
+13/13 Test: format_bytes: gigabytes
+Command: "D:/disktree/build/dev/tests/disktree_tests.exe" "format_bytes: gigabytes"
+Directory: D:/disktree/build/dev/tests
+"format_bytes: gigabytes" start time: May 29 11:19 India Standard Time
+Output:
+----------------------------------------------------------
+Filters: "format_bytes: gigabytes"
+Randomness seeded to: 279536736
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"format_bytes: gigabytes" end time: May 29 11:19 India Standard Time
+"format_bytes: gigabytes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: May 29 11:19 India Standard Time

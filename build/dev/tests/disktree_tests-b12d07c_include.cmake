@@ -1,0 +1,5 @@
+if(EXISTS "D:/disktree/build/dev/tests/disktree_tests-b12d07c_tests.cmake")
+  include("D:/disktree/build/dev/tests/disktree_tests-b12d07c_tests.cmake")
+else()
+  add_test(disktree_tests_NOT_BUILT-b12d07c disktree_tests_NOT_BUILT-b12d07c)
+endif()

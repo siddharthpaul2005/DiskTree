@@ -1,0 +1,13 @@
+{
+  "name": "disktree",
+  "version": "0.1.0",
+  "dependencies": [
+    "cli11",
+    "nlohmann-json",
+    "fmt",
+    "ftxui",
+    "zstd",
+    "cpp-httplib",
+    "catch2"
+  ]
+}

@@ -1,0 +1,96 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 15816992f390cbc9e68865bcb093fa3764d000ec294787f56aa7db997d56fcfd
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: b042888bee010d4e7085cf7823af0f5acd62176b644e591e333dd564a7796c31
+Status: install ok installed
+
+Package: catch2
+Version: 3.15.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 46a3ef9215a0611941710327863fad3620847c9d4ee26599af1eedd7e02b9ad9
+Description: A modern, C++-native, test framework for unit-tests, TDD and BDD.
+Status: install ok installed
+
+Package: cli11
+Version: 2.6.2
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 0fdf8b351d92f7f101aa9f7e12b4841f92f29491cf756410525ab6f2e9947aa6
+Description: CLI11 is a command line parser for C++11 and beyond that provides a rich feature set with a simple and intuitive interface.
+Status: install ok installed
+
+Package: brotli
+Version: 1.2.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: de35a215df7a70fbb2ecb0470900acec9b84531b08842ec0cec8b8d77a04fffa
+Description: a generic-purpose lossless compression algorithm that compresses data using a combination of a modern variant of the LZ77 algorithm, Huffman coding and 2nd order context modeling.
+Status: install ok installed
+
+Package: cpp-httplib
+Version: 0.46.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: ae95ae560bd778d610bfb21e505dd1d076dcb353951569bee01badba8d5435b5
+Description: A single file C++11 header-only HTTP/HTTPS server and client library
+Default-Features: brotli
+Status: install ok installed
+
+Package: cpp-httplib
+Feature: brotli
+Depends: brotli
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Enables brotli compression support using brotli
+Status: install ok installed
+
+Package: fmt
+Version: 12.1.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 9cd07fa288c1b78ac8aa1ae63d0058a28080488031739d7dd810bd8e85f82441
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: install ok installed
+
+Package: ftxui
+Version: 6.1.9
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: cbd430565223101aa871ca9be10fe2a991187cdafefa01674ffc7219d081e359
+Description: C++ Functional Terminal User Interface
+Status: install ok installed
+
+Package: nlohmann-json
+Version: 3.12.0
+Port-Version: 2
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 3c1ee53238f0a4b3a201556b81991ca4ae86b841c2297ba916c5f94ad4cb44e0
+Description: JSON for Modern C++
+Status: install ok installed
+
+Package: zstd
+Version: 1.5.7
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 8d7e0924b3547efdebfe91c004b26095acae64f536a530f4a634734d714f6427
+Description: Zstandard - Fast real-time compression algorithm
+Status: install ok installed
+

@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "tests\\CMakeFiles\\disktree_tests.dir\\unit\\test_humanize.cpp.obj",
+            "outputs": [
+                "D:\\disktree\\build\\dev\\vc140.pdb",
+                "tests\\CMakeFiles\\disktree_tests.dir\\unit\\test_humanize.cpp.obj.ddi"
+            ],
+            "requires": []
+        }
+    ]
+}
