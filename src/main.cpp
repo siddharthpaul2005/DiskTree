@@ -10,6 +10,7 @@
 #include "disktree/export/json_export.hpp"
 #include "disktree/export/csv_export.hpp"
 #include "disktree/interfaces/tui/app.hpp"
+#include "disktree/interfaces/web/server.hpp"
 
 #include <CLI/CLI.hpp>
 #include <fmt/format.h>
@@ -183,8 +184,21 @@ int main(int argc, char** argv) {
 
     bool tui_mode = false;
     app.add_flag("--tui", tui_mode, "Launch interactive TUI");
-    CLI11_PARSE(app, argc, argv);
+    
+    bool web_mode = false;
+    uint16_t web_port = 7821;
 
+    app.add_flag("--web", web_mode,
+             "Launch web UI in browser");
+
+    app.add_option("--port", web_port,
+               "Web UI port")
+        ->default_val(7821);
+
+    CLI11_PARSE(app, argc, argv);
+    
+
+    
     try {
         // Parse min-size
         uint64_t min_size = 0;
@@ -232,7 +246,9 @@ int main(int argc, char** argv) {
         disktree::Index index;
         index.build(result);
 
-
+        if (web_mode) {
+            return disktree::web::run(result, index, web_port);
+        }
         // TUI mode
         if (tui_mode) {
             return disktree::tui::run(result, index);

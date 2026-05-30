@@ -247,7 +247,29 @@ build CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj: CXX_COMPILER_
   TARGET_SUPPORT_DIR = CMakeFiles\disktree_core.dir
   dyndep = CMakeFiles/disktree_core.dir/CXX.dd
 
-build CMakeFiles\disktree_core.dir\CXX.dd | CMakeFiles\disktree_core.dir\CXXModules.json CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\index.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj.modmap: CXX_DYNDEP__disktree_core_Debug CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\index.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj.ddi | D$:\disktree\build\dev\CMakeFiles\disktree_core.dir\CXXDependInfo.json
+build CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.ddi: CXX_SCAN__disktree_core_Debug D$:\disktree\src\interfaces\web\server.cpp || cmake_object_order_depends_target_disktree_core
+  DEFINES = -DBROTLI_SHARED_COMPILATION -DCLI11_COMPILE -DCPPHTTPLIB_BROTLI_SUPPORT -DCPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO -DFMT_SHARED
+  DEP_FILE = CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.ddi.d
+  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.ddi
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++latest -MDd -Zi /utf-8
+  INCLUDES = -ID:\disktree\include -external:ID:\disktree\build\dev\vcpkg_installed\x64-windows\include -external:W0
+  OBJ_FILE = CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj
+  PREPROCESSED_OUTPUT_FILE = CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.ddi.i
+
+build CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj: CXX_COMPILER__disktree_core_scanned_Debug D$:\disktree\src\interfaces\web\server.cpp | CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.modmap || cmake_object_order_depends_target_disktree_core CMakeFiles\disktree_core.dir\CXX.dd
+  CONFIG = Debug
+  DEFINES = -DBROTLI_SHARED_COMPILATION -DCLI11_COMPILE -DCPPHTTPLIB_BROTLI_SUPPORT -DCPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO -DFMT_SHARED
+  DYNDEP_MODULE_MAP_FILE = CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.modmap
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++latest -MDd -Zi /utf-8
+  INCLUDES = -ID:\disktree\include -external:ID:\disktree\build\dev\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = CMakeFiles\disktree_core.dir
+  OBJECT_FILE_DIR = CMakeFiles\disktree_core.dir\src\interfaces\web
+  TARGET_COMPILE_PDB = CMakeFiles\disktree_core.dir\disktree_core.pdb
+  TARGET_PDB = disktree_core.pdb
+  TARGET_SUPPORT_DIR = CMakeFiles\disktree_core.dir
+  dyndep = CMakeFiles/disktree_core.dir/CXX.dd
+
+build CMakeFiles\disktree_core.dir\CXX.dd | CMakeFiles\disktree_core.dir\CXXModules.json CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\core\index.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj.modmap CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.modmap: CXX_DYNDEP__disktree_core_Debug CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\core\index.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj.ddi CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj.ddi | D$:\disktree\build\dev\CMakeFiles\disktree_core.dir\CXXDependInfo.json
 
 
 # =============================================================================
@@ -257,7 +279,7 @@ build CMakeFiles\disktree_core.dir\CXX.dd | CMakeFiles\disktree_core.dir\CXXModu
 #############################################
 # Link the static library disktree_core.lib
 
-build disktree_core.lib: CXX_STATIC_LIBRARY_LINKER__disktree_core_Debug CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj CMakeFiles\disktree_core.dir\src\core\index.cpp.obj CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj
+build disktree_core.lib: CXX_STATIC_LIBRARY_LINKER__disktree_core_Debug CMakeFiles\disktree_core.dir\src\utils\humanize.cpp.obj CMakeFiles\disktree_core.dir\src\utils\thread_pool.cpp.obj CMakeFiles\disktree_core.dir\src\core\arena.cpp.obj CMakeFiles\disktree_core.dir\src\core\scanner.cpp.obj CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj CMakeFiles\disktree_core.dir\src\core\index.cpp.obj CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj CMakeFiles\disktree_core.dir\src\interfaces\tui\app.cpp.obj CMakeFiles\disktree_core.dir\src\interfaces\web\server.cpp.obj
   CONFIG = Debug
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64
@@ -314,7 +336,7 @@ build disktree.exe: CXX_EXECUTABLE_LINKER__disktree_Debug CMakeFiles\disktree.di
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = disktree_core.lib  vcpkg_installed\x64-windows\debug\lib\CLI11.lib  vcpkg_installed\x64-windows\debug\lib\fmtd.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-component.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-dom.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-screen.lib  ws2_32.lib  crypt32.lib  vcpkg_installed\x64-windows\debug\lib\brotlienc.lib  vcpkg_installed\x64-windows\debug\lib\brotlidec.lib  vcpkg_installed\x64-windows\debug\lib\brotlicommon.lib  vcpkg_installed\x64-windows\debug\lib\zstd.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = disktree_core.lib  shell32.lib  vcpkg_installed\x64-windows\debug\lib\CLI11.lib  vcpkg_installed\x64-windows\debug\lib\fmtd.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-component.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-dom.lib  vcpkg_installed\x64-windows\debug\lib\ftxui-screen.lib  ws2_32.lib  crypt32.lib  vcpkg_installed\x64-windows\debug\lib\brotlienc.lib  vcpkg_installed\x64-windows\debug\lib\brotlidec.lib  vcpkg_installed\x64-windows\debug\lib\brotlicommon.lib  vcpkg_installed\x64-windows\debug\lib\zstd.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\disktree.dir
   POST_BUILD = C:\WINDOWS\system32\cmd.exe /C "cd /D D:\disktree\build\dev && C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file D:/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/disktree/build/dev/disktree.exe -installedDir D:/disktree/build/dev/vcpkg_installed/x64-windows/debug/bin -OutVariable out"
   PRE_LINK = cd .

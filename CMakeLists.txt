@@ -26,6 +26,7 @@ add_library(disktree_core STATIC
     src/export/json_export.cpp
     src/export/csv_export.cpp
     src/interfaces/tui/app.cpp
+    src/interfaces/web/server.cpp
 )
 
 target_include_directories(disktree_core
@@ -53,3 +54,7 @@ target_link_libraries(disktree PRIVATE disktree_core)
 # ── Tests ───────────────────────────────────────────────────────
 enable_testing()
 add_subdirectory(tests)
+
+if(WIN32)
+    target_link_libraries(disktree PRIVATE shell32)
+endif()
