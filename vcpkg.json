@@ -1,6 +1,7 @@
 {
   "name": "disktree",
   "version": "0.1.0",
+  "builtin-baseline": "9b965a116838c6cdcd36bca60d1b81b030c8ab8d",
   "dependencies": [
     "cli11",
     "nlohmann-json",

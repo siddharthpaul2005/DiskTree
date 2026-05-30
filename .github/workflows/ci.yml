@@ -13,18 +13,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgJsonGlob: 'vcpkg.json'
+      - name: Install vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
+          C:\vcpkg\bootstrap-vcpkg.bat
+          echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
 
       - name: Configure
         run: cmake --preset dev
         env:
-          VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+          VCPKG_ROOT: C:\vcpkg
 
       - name: Build
         run: cmake --build --preset dev
+        env:
+          VCPKG_ROOT: C:\vcpkg
 
       - name: Test
         run: ctest --preset dev
+        env:
+          VCPKG_ROOT: C:\vcpkg
