@@ -52,6 +52,11 @@
 			"language" : "CXX",
 			"source" : "D:/disktree/src/export/json_export.cpp"
 		},
+		"CMakeFiles/disktree_core.dir/src/interfaces/tui/app.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "D:/disktree/src/interfaces/tui/app.cpp"
+		},
 		"CMakeFiles/disktree_core.dir/src/utils/humanize.cpp.obj" : 
 		{
 			"language" : "CXX",

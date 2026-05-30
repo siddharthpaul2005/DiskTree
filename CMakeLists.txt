@@ -25,6 +25,7 @@ add_library(disktree_core STATIC
     src/core/index.cpp
     src/export/json_export.cpp
     src/export/csv_export.cpp
+    src/interfaces/tui/app.cpp
 )
 
 target_include_directories(disktree_core

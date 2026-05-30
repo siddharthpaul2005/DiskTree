@@ -9,6 +9,7 @@
 #include "disktree/utils/progress.hpp"
 #include "disktree/export/json_export.hpp"
 #include "disktree/export/csv_export.hpp"
+#include "disktree/interfaces/tui/app.hpp"
 
 #include <CLI/CLI.hpp>
 #include <fmt/format.h>
@@ -179,6 +180,9 @@ int main(int argc, char** argv) {
     app.add_option("--diff", diff_path,
        "Diff against a saved snapshot file");
 
+
+    bool tui_mode = false;
+    app.add_flag("--tui", tui_mode, "Launch interactive TUI");
     CLI11_PARSE(app, argc, argv);
 
     try {
@@ -228,6 +232,11 @@ int main(int argc, char** argv) {
         disktree::Index index;
         index.build(result);
 
+
+        // TUI mode
+        if (tui_mode) {
+            return disktree::tui::run(result, index);
+        }
         // Apply sort
         // (tree is already sorted by size from builder;
         //  other sorts reorder the index queries)
