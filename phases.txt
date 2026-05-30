@@ -1,4 +1,0 @@
-Phase 1 — Foundation & Skeleton        (models, humanize, thread pool, CMake, vcpkg)
-Phase 2 — Core Engine                  (scanner, builder, index, treemap algo, differ)
-Phase 3 — CLI Interface                (main.cpp, full CLI output, export, snapshots)
-Phase 4 — TUI + Web Interface          (ftxui TUI, cpp-httplib web server, React frontend)

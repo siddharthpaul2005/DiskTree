@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"D:/disktree/build/dev/cmake_install.cmake",
-		"D:/disktree/build/dev/tests/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

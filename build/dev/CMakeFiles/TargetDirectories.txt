@@ -1,9 +1,0 @@
-D:/disktree/build/dev/CMakeFiles/disktree_core.dir
-D:/disktree/build/dev/CMakeFiles/disktree.dir
-D:/disktree/build/dev/CMakeFiles/test.dir
-D:/disktree/build/dev/CMakeFiles/edit_cache.dir
-D:/disktree/build/dev/CMakeFiles/rebuild_cache.dir
-D:/disktree/build/dev/tests/CMakeFiles/disktree_tests.dir
-D:/disktree/build/dev/tests/CMakeFiles/test.dir
-D:/disktree/build/dev/tests/CMakeFiles/edit_cache.dir
-D:/disktree/build/dev/tests/CMakeFiles/rebuild_cache.dir

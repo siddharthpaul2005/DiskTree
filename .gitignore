@@ -35,3 +35,15 @@ desktop.ini
 phases.txt
 *.png
 .env.cmd
+
+# Junk files
+phases.txt
+progressofprohext.txt
+*.csv
+*.json
+!vcpkg.json
+!packaging/scoop/disktree.json
+Screenshot*
+.env.cmd
+compile_commands.json
+disktree_export*
