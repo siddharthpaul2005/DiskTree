@@ -64,67 +64,116 @@ static std::string get_html() {
 <title>disktree</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <style>
+  :root {
+    --bg-main: #0b0c10;
+    --bg-panel: #141518;
+    --bg-hover: #1f2025;
+    --border: #24262b;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #3b82f6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: Consolas, "Courier New", monospace;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #0a0a0f;
-    color: #e0e0e0;
+    font-family: var(--font-ui);
+    background: var(--bg-main);
+    color: var(--text-main);
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
+  /* Header */
   #header {
-    background: #12121e;
-    border-bottom: 1px solid #2a2a4a;
-    padding: 12px 20px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
     display: flex;
     align-items: center;
     gap: 16px;
     flex-shrink: 0;
+    height: 48px;
   }
 
   #header h1 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #50a0ff;
-    letter-spacing: 0.05em;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 16px;
   }
 
   #header .path {
     font-size: 13px;
-    color: #888;
-    font-family: monospace;
+    color: var(--text-main);
+    font-family: var(--font-mono);
     flex: 1;
+    background: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  #header .stat {
+  .stats-group {
+    display: flex;
+    gap: 16px;
     font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 12px;
-    background: #1a1a2e;
-    color: #64c864;
-    border: 1px solid #2a4a2a;
   }
 
-  #breadcrumb {
-    background: #0e0e1a;
-    padding: 8px 20px;
-    font-size: 12px;
-    color: #666;
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+  }
+  
+  .stat-val {
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  /* Toolbar / Breadcrumb */
+  #toolbar {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
     flex-shrink: 0;
-    border-bottom: 1px solid #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
-  #breadcrumb span {
+  #toolbar span.segment {
     cursor: pointer;
-    color: #50a0ff;
+    padding: 4px 6px;
+    border-radius: 4px;
   }
 
-  #breadcrumb span:hover { text-decoration: underline; }
+  #toolbar span.segment:hover { 
+    background: var(--bg-hover);
+    color: var(--text-main);
+  }
+  
+  #toolbar .separator {
+    color: var(--border);
+  }
 
+  /* Main Area */
   #main {
     display: flex;
     flex: 1;
@@ -135,53 +184,62 @@ static std::string get_html() {
     flex: 1;
     position: relative;
     overflow: hidden;
+    background: var(--bg-main);
   }
 
   #treemap-container svg {
     width: 100%;
     height: 100%;
+    display: block;
   }
 
   .node rect {
-    stroke: #0a0a0f;
-    stroke-width: 1.5px;
+    stroke: var(--bg-main);
+    stroke-width: 1px;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: filter 0.1s;
   }
 
-  .node rect:hover { opacity: 0.8; }
+  .node rect:hover { 
+    filter: brightness(1.2);
+    stroke: #ffffff;
+    stroke-width: 1px;
+  }
 
   .node text {
-    fill: white;
-    font-size: 11px;
+    fill: #ffffff;
+    font-size: 12px;
+    font-family: var(--font-ui);
     pointer-events: none;
-    font-family: 'Segoe UI', sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
   }
 
   .node text.size-label {
-    font-size: 10px;
-    fill: rgba(255,255,255,0.7);
+    font-size: 11px;
+    fill: rgba(255,255,255,0.8);
+    font-family: var(--font-mono);
   }
 
+  /* Sidebar */
   #sidebar {
     width: 340px;
-    background: #0e0e1a;
-    border-left: 1px solid #1a1a2e;
+    background: var(--bg-panel);
+    border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex-shrink: 0;
   }
 
-  #sidebar-header {
-    padding: 12px 16px;
-    background: #12121e;
-    border-bottom: 1px solid #1a1a2e;
-    font-size: 12px;
+  .sidebar-header {
+    padding: 8px 12px;
+    font-size: 11px;
     font-weight: 600;
-    color: #50a0ff;
+    color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-main);
   }
 
   #file-list {
@@ -189,152 +247,195 @@ static std::string get_html() {
     flex: 1;
   }
 
-  #file-list::-webkit-scrollbar { width: 4px; }
-  #file-list::-webkit-scrollbar-track { background: #0a0a0f; }
-  #file-list::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 2px; }
+  #file-list::-webkit-scrollbar,
+  #ext-panel::-webkit-scrollbar { width: 8px; }
+  #file-list::-webkit-scrollbar-track,
+  #ext-panel::-webkit-scrollbar-track { background: var(--bg-panel); }
+  #file-list::-webkit-scrollbar-thumb,
+  #ext-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; border: 2px solid var(--bg-panel); }
 
   .file-row {
     display: flex;
     align-items: center;
-    padding: 6px 16px;
-    border-bottom: 1px solid #111122;
+    padding: 6px 12px;
     font-size: 12px;
     cursor: pointer;
-    transition: background 0.1s;
+    border-bottom: 1px solid var(--border);
   }
 
-  .file-row:hover { background: #1a1a2e; }
+  .file-row:hover { 
+    background: var(--bg-hover); 
+  }
 
-  .file-row .icon { margin-right: 8px; font-size: 14px; }
-  .file-row .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ccc; }
-  .file-row .size { color: #64c864; font-size: 11px; margin-left: 8px; white-space: nowrap; }
-  .file-row .pct  { color: #c8a040; font-size: 10px; margin-left: 6px; white-space: nowrap; }
+  .file-row .icon { 
+    margin-right: 8px; 
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-row .name { 
+    flex: 1;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    color: var(--text-main); 
+  }
+  
+  .file-row .size { 
+    color: var(--text-muted); 
+    font-family: var(--font-mono);
+    text-align: right;
+    min-width: 60px;
+  }
+
+  /* Extensions */
+  #ext-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    border-top: 1px solid var(--border);
+  }
 
   #ext-panel {
-    padding: 12px 16px;
-    border-top: 1px solid #1a1a2e;
-    max-height: 200px;
     overflow-y: auto;
-    flex-shrink: 0;
-  }
-
-  #ext-panel h3 {
-    font-size: 11px;
-    font-weight: 600;
-    color: #50a0ff;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
+    padding: 8px 12px;
+    flex: 1;
   }
 
   .ext-row {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-size: 11px;
   }
 
-  .ext-name { width: 55px; color: #888; font-family: monospace; }
-  .ext-bar-bg { flex: 1; height: 6px; background: #1a1a2e; border-radius: 3px; margin: 0 8px; }
-  .ext-bar { height: 6px; border-radius: 3px; background: #50a0ff; transition: width 0.3s; }
-  .ext-size { width: 70px; text-align: right; color: #64c864; }
+  .ext-name { 
+    width: 60px; 
+    color: var(--text-main); 
+    font-family: var(--font-mono); 
+  }
+  .ext-bar-bg { 
+    flex: 1; 
+    height: 14px; 
+    background: var(--bg-main); 
+    margin: 0 8px; 
+    border: 1px solid var(--border);
+  }
+  .ext-bar { 
+    height: 100%; 
+    background: var(--accent); 
+  }
+  .ext-size { 
+    width: 60px; 
+    text-align: right; 
+    color: var(--text-muted); 
+    font-family: var(--font-mono);
+  }
 
+  /* Tooltip */
   #tooltip {
     position: fixed;
-    background: #1a1a2e;
-    border: 1px solid #2a2a4a;
-    border-radius: 6px;
+    background: #000;
+    border: 1px solid #333;
     padding: 8px 12px;
     font-size: 12px;
     pointer-events: none;
     display: none;
     z-index: 100;
-    max-width: 280px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    color: #fff;
+    white-space: nowrap;
   }
 
-  #tooltip .tt-name { font-weight: 600; color: #fff; margin-bottom: 4px; }
-  #tooltip .tt-size { color: #64c864; }
-  #tooltip .tt-pct  { color: #c8a040; }
+  #tooltip .tt-name { font-weight: 600; margin-bottom: 4px; }
+  #tooltip .tt-meta { font-family: var(--font-mono); color: #ccc; }
 
+  /* Footer Note */
+  #footer-note {
+    padding: 12px;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: var(--bg-panel);
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+
+  /* Loading */
   #loading {
     position: fixed;
     inset: 0;
-    background: #0a0a0f;
+    background: var(--bg-main);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    color: #50a0ff;
+    font-size: 14px;
+    color: var(--text-muted);
     z-index: 200;
   }
-
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid #1a1a2e;
-    border-top-color: #50a0ff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-right: 16px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div id="loading">
-  <div class="spinner"></div>
-  Loading scan data...
-</div>
+<div id="loading">Scanning Directory...</div>
 
 <div id="header" style="display:none">
   <h1>🌳 disktree</h1>
   <div class="path" id="header-path"></div>
-  <div class="stat" id="stat-size"></div>
-  <div class="stat" id="stat-files"></div>
-  <div class="stat" id="stat-time"></div>
+  <div class="stats-group">
+    <div class="stat">Size: <span class="stat-val" id="stat-size"></span></div>
+    <div class="stat">Files: <span class="stat-val" id="stat-files"></span></div>
+    <div class="stat">Time: <span class="stat-val" id="stat-time"></span></div>
+  </div>
 </div>
 
-<div id="breadcrumb" style="display:none"></div>
+<div id="toolbar" style="display:none"></div>
 
 <div id="main" style="display:none">
   <div id="treemap-container"></div>
   <div id="sidebar">
-    <div id="sidebar-header">Contents</div>
+    <div class="sidebar-header">Contents</div>
     <div id="file-list"></div>
-    <div id="ext-panel">
-      <h3>Extensions</h3>
-      <div id="ext-bars"></div>
+    <div id="ext-wrapper">
+      <div class="sidebar-header">Extensions</div>
+      <div id="ext-panel">
+        <div id="ext-bars"></div>
+      </div>
     </div>
+    <div id="footer-note">
+      Thanks for using disktree! If you spot any discrepancies or have feedback, please let me know so I can fix it and make this even better for you. ❤️
+      - Siddharth Paul
+      </div>
   </div>
 </div>
 
 <div id="tooltip">
   <div class="tt-name" id="tt-name"></div>
-  <div class="tt-size" id="tt-size"></div>
-  <div class="tt-pct"  id="tt-pct"></div>
+  <div class="tt-meta">
+    <span id="tt-size"></span> (<span id="tt-pct"></span>)
+  </div>
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────
+// State
 let rootData = null;
 let currentNode = null;
 let navStack = [];
 let extensions = [];
 
-// ── Color scale ───────────────────────────────────────────────────
-const colorScale = d3.scaleOrdinal([
-  '#1e4d8c','#2d6a4f','#6d3a1e','#4a1e6d',
-  '#1e5c6d','#6d5c1e','#3d1e6d','#1e6d4a',
-  '#5c1e4a','#2d4a6d','#4a6d2d','#6d2d4a'
-]);
+// Professional Categorical Palette (Tableau 10 inspired)
+const profColors = [
+  '#4e79a7', '#f28e2c', '#e15759', '#76b7b2', '#59a14f', 
+  '#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab'
+];
+const colorScale = d3.scaleOrdinal(profColors);
 
 function getColor(d, i) {
-  return colorScale(i % 12);
+  return colorScale(i % profColors.length);
 }
 
-// ── Format helpers ────────────────────────────────────────────────
 function fmtBytes(b) {
   if (b < 1024) return b + ' B';
   if (b < 1024*1024) return (b/1024).toFixed(2) + ' KB';
@@ -344,7 +445,10 @@ function fmtBytes(b) {
 
 function fmtPct(p) { return (p * 100).toFixed(1) + '%'; }
 
-// ── Treemap renderer ──────────────────────────────────────────────
+// Icons SVG
+const iconFolder = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>';
+const iconFile = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>';
+
 function renderTreemap(node) {
   currentNode = node;
   const container = document.getElementById('treemap-container');
@@ -354,14 +458,13 @@ function renderTreemap(node) {
   const H = container.clientHeight;
   if (!W || !H) return;
 
-  // Build D3 hierarchy from children
   const children = [
     ...(node.children || []).filter(c => c.type === 'dir'),
     ...(node.children || []).filter(c => c.type === 'file'),
   ];
 
   if (children.length === 0) {
-    container.innerHTML = '<div style="padding:40px;color:#666;text-align:center">No subdirectories</div>';
+    container.innerHTML = '<div style="padding:40px;color:#666;text-align:center;font-size:13px;">Empty Directory</div>';
     return;
   }
 
@@ -371,8 +474,8 @@ function renderTreemap(node) {
 
   d3.treemap()
     .size([W, H])
-    .paddingOuter(3)
-    .paddingInner(2)
+    .paddingOuter(2)
+    .paddingInner(1)
     .round(true)(hier);
 
   const svg = d3.select('#treemap-container')
@@ -392,11 +495,19 @@ function renderTreemap(node) {
     .attr('width',  d => Math.max(0, d.x1 - d.x0))
     .attr('height', d => Math.max(0, d.y1 - d.y0))
     .attr('fill',   (d, i) => getColor(d, i))
-    .attr('rx', 2)
     .on('mousemove', (e, d) => {
       tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top  = (e.clientY + 14) + 'px';
+      tooltip.style.left = (e.clientX + 16) + 'px';
+      tooltip.style.top  = (e.clientY + 16) + 'px';
+      
+      const rect = tooltip.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        tooltip.style.left = (e.clientX - rect.width - 16) + 'px';
+      }
+      if (rect.bottom > window.innerHeight) {
+        tooltip.style.top = (e.clientY - rect.height - 16) + 'px';
+      }
+
       document.getElementById('tt-name').textContent = d.data.name;
       document.getElementById('tt-size').textContent = fmtBytes(d.data.size);
       document.getElementById('tt-pct').textContent  = fmtPct(d.data.pct);
@@ -410,38 +521,41 @@ function renderTreemap(node) {
   cell.each(function(d) {
     const w = d.x1 - d.x0;
     const h = d.y1 - d.y0;
-    if (w < 40 || h < 30) return;
+    if (w < 40 || h < 25) return;
 
     const g = d3.select(this);
     const name = d.data.name;
     const label = name.length > Math.floor(w/7) ? name.substr(0, Math.floor(w/7)) + '…' : name;
 
     g.append('text')
-      .attr('x', 5).attr('y', 16)
+      .attr('x', 4).attr('y', 14)
       .text(label);
 
-    if (h > 36) {
+    if (h > 30) {
       g.append('text')
         .attr('class', 'size-label')
-        .attr('x', 5).attr('y', 30)
+        .attr('x', 4).attr('y', 26)
         .text(fmtBytes(d.data.size));
     }
   });
 
-  // Update sidebar
   renderSidebar(node);
   updateBreadcrumb();
 }
 
-// ── Drill into directory ──────────────────────────────────────────
 function drillInto(node) {
   if (!node.children || node.children.length === 0) {
-    // Fetch deeper data
+    document.getElementById('loading').style.display = 'flex';
     fetch('/api/node?path=' + encodeURIComponent(node.path))
       .then(r => r.json())
       .then(data => {
+        document.getElementById('loading').style.display = 'none';
         navStack.push(currentNode);
         renderTreemap(data);
+      })
+      .catch(e => {
+        document.getElementById('loading').style.display = 'none';
+        alert('Error loading directory: ' + e.message);
       });
   } else {
     navStack.push(currentNode);
@@ -449,7 +563,6 @@ function drillInto(node) {
   }
 }
 
-// ── Go up ─────────────────────────────────────────────────────────
 function goUp() {
   if (navStack.length > 0) {
     const parent = navStack.pop();
@@ -457,21 +570,18 @@ function goUp() {
   }
 }
 
-// ── Breadcrumb ────────────────────────────────────────────────────
 function updateBreadcrumb() {
-  const bc = document.getElementById('breadcrumb');
+  const bc = document.getElementById('toolbar');
   const parts = [];
-
-  // Build path from nav stack + current
   const nodes = [...navStack, currentNode];
-  parts.push('<span onclick="goToIndex(0)">root</span>');
+  
+  parts.push('<span class="segment" onclick="goToIndex(0)">[Root]</span>');
   for (let i = 1; i < nodes.length; i++) {
-    const idx = i;
-    parts.push('<span onclick="goToIndex(' + idx + ')">' +
-               nodes[i].name + '</span>');
+    parts.push('<span class="separator">›</span>');
+    parts.push('<span class="segment" onclick="goToIndex(' + i + ')">' + nodes[i].name + '</span>');
   }
 
-  bc.innerHTML = parts.join(' › ');
+  bc.innerHTML = parts.join('');
 }
 
 function goToIndex(i) {
@@ -481,7 +591,6 @@ function goToIndex(i) {
   renderTreemap(target);
 }
 
-// ── Sidebar ───────────────────────────────────────────────────────
 function renderSidebar(node) {
   const list = document.getElementById('file-list');
   list.innerHTML = '';
@@ -494,17 +603,11 @@ function renderSidebar(node) {
   items.forEach(item => {
     const row = document.createElement('div');
     row.className = 'file-row';
-
-    const icon = item.type === 'dir' ? '📁' : '📄';
-    const name = item.name;
-    const size = fmtBytes(item.size);
-    const pct  = fmtPct(item.pct);
-
+    
     row.innerHTML =
-      '<span class="icon">' + icon + '</span>' +
-      '<span class="name" title="' + item.path + '">' + name + '</span>' +
-      '<span class="size">' + size + '</span>' +
-      '<span class="pct">' + pct + '</span>';
+      '<div class="icon">' + (item.type === 'dir' ? iconFolder : iconFile) + '</div>' +
+      '<div class="name" title="' + item.path + '">' + item.name + '</div>' +
+      '<div class="size">' + fmtBytes(item.size) + '</div>';
 
     if (item.type === 'dir') {
       row.onclick = () => drillInto(item);
@@ -514,26 +617,29 @@ function renderSidebar(node) {
   });
 }
 
-// ── Extension bars ────────────────────────────────────────────────
 function renderExtensions(exts) {
   const container = document.getElementById('ext-bars');
   container.innerHTML = '';
-  if (!exts.length) return;
+  if (!exts.length) {
+    container.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:8px;">No files</div>';
+    return;
+  }
 
   const maxBytes = exts[0].bytes;
-  exts.slice(0, 12).forEach(e => {
+  exts.slice(0, 15).forEach(e => {
     const pct = (e.bytes / maxBytes) * 100;
     const row = document.createElement('div');
     row.className = 'ext-row';
+    
     row.innerHTML =
-      '<div class="ext-name">' + e.ext + '</div>' +
+      '<div class="ext-name" title="' + e.ext + '">' + (e.ext || '(none)') + '</div>' +
       '<div class="ext-bar-bg"><div class="ext-bar" style="width:' + pct + '%"></div></div>' +
       '<div class="ext-size">' + fmtBytes(e.bytes) + '</div>';
+      
     container.appendChild(row);
   });
 }
 
-// ── Boot ──────────────────────────────────────────────────────────
 async function boot() {
   try {
     const res  = await fetch('/api/scan');
@@ -542,16 +648,16 @@ async function boot() {
     rootData   = data.tree;
     extensions = data.extensions || [];
 
-    // Header
     document.getElementById('header-path').textContent = data.scan_path;
+    document.getElementById('header-path').title = data.scan_path;
     document.getElementById('stat-size').textContent   = fmtBytes(data.total_size);
-    document.getElementById('stat-files').textContent  = data.total_files.toLocaleString() + ' files';
+    document.getElementById('stat-files').textContent  = data.total_files.toLocaleString();
     document.getElementById('stat-time').textContent   = data.elapsed_sec.toFixed(2) + 's';
 
     document.getElementById('loading').style.display  = 'none';
-    document.getElementById('header').style.display   = '';
-    document.getElementById('breadcrumb').style.display = '';
-    document.getElementById('main').style.display     = '';
+    document.getElementById('header').style.display   = 'flex';
+    document.getElementById('toolbar').style.display  = 'flex';
+    document.getElementById('main').style.display     = 'flex';
 
     renderExtensions(extensions);
     renderTreemap(rootData);
@@ -561,12 +667,10 @@ async function boot() {
   }
 }
 
-// Handle resize
 window.addEventListener('resize', () => {
   if (currentNode) renderTreemap(currentNode);
 });
 
-// Keyboard nav
 window.addEventListener('keydown', e => {
   if (e.key === 'Backspace' || e.key === 'Escape') goUp();
 });
