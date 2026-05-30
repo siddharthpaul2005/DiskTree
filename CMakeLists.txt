@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.28)
 project(disktree VERSION 0.1.0 LANGUAGES CXX)
 
+# Force static runtime for ALL targets including dependencies
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    # Apply to all targets globally
+    add_compile_options(
+        $<$<CONFIG:Release>:/MT>
+        $<$<CONFIG:Debug>:/MTd>
+    )
+endif()
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -58,3 +68,4 @@ add_subdirectory(tests)
 if(WIN32)
     target_link_libraries(disktree PRIVATE shell32)
 endif()
+

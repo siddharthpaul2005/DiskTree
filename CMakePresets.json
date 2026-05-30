@@ -14,27 +14,21 @@
       }
     },
     {
-      "name": "release",
-      "displayName": "Release",
+      "name": "release-static",
+      "displayName": "Release (static, shippable)",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "VCPKG_TARGET_TRIPLET": "x64-windows"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
       }
     }
   ],
   "buildPresets": [
-    {
-      "name": "dev",
-      "configurePreset": "dev"
-    },
-    {
-      "name": "release",
-      "configurePreset": "release"
-    }
+    { "name": "dev",            "configurePreset": "dev" },
+    { "name": "release-static", "configurePreset": "release-static" }
   ],
   "testPresets": [
     {

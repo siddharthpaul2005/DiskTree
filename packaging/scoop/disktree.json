@@ -1,0 +1,21 @@
+{
+  "version": "0.1.0",
+  "description": "Fast disk usage analyzer — C++ WizTree alternative",
+  "homepage": "https://github.com/YOUR_USERNAME/disktree",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/YOUR_USERNAME/disktree/releases/download/v0.1.0/disktree-windows-x64.exe",
+      "hash": "auto"
+    }
+  },
+  "bin": "disktree-windows-x64.exe",
+  "checkver": "github",
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/YOUR_USERNAME/disktree/releases/download/v$version/disktree-windows-x64.exe"
+      }
+    }
+  }
+}
