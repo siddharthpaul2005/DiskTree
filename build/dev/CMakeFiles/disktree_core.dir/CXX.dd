@@ -11,3 +11,7 @@ build CMakeFiles\disktree_core.dir\src\core\builder.cpp.obj: dyndep
 
 build CMakeFiles\disktree_core.dir\src\core\index.cpp.obj: dyndep
 
+build CMakeFiles\disktree_core.dir\src\export\json_export.cpp.obj: dyndep
+
+build CMakeFiles\disktree_core.dir\src\export\csv_export.cpp.obj: dyndep
+

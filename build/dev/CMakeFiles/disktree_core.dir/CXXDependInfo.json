@@ -42,6 +42,16 @@
 			"language" : "CXX",
 			"source" : "D:/disktree/src/core/scanner.cpp"
 		},
+		"CMakeFiles/disktree_core.dir/src/export/csv_export.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "D:/disktree/src/export/csv_export.cpp"
+		},
+		"CMakeFiles/disktree_core.dir/src/export/json_export.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "D:/disktree/src/export/json_export.cpp"
+		},
 		"CMakeFiles/disktree_core.dir/src/utils/humanize.cpp.obj" : 
 		{
 			"language" : "CXX",

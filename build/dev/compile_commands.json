@@ -37,6 +37,18 @@
 },
 {
   "directory": "D:/disktree/build/dev",
+  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DBROTLI_SHARED_COMPILATION -DCLI11_COMPILE -DCPPHTTPLIB_BROTLI_SUPPORT -DCPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO -DFMT_SHARED -ID:\\disktree\\include -external:ID:\\disktree\\build\\dev\\vcpkg_installed\\x64-windows\\include -external:W0 /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++latest -MDd -Zi /utf-8 @CMakeFiles\\disktree_core.dir\\src\\export\\json_export.cpp.obj.modmap /FoCMakeFiles\\disktree_core.dir\\src\\export\\json_export.cpp.obj /FdCMakeFiles\\disktree_core.dir\\disktree_core.pdb /FS -c D:\\disktree\\src\\export\\json_export.cpp",
+  "file": "D:/disktree/src/export/json_export.cpp",
+  "output": "D:/disktree/build/dev/CMakeFiles/disktree_core.dir/src/export/json_export.cpp.obj"
+},
+{
+  "directory": "D:/disktree/build/dev",
+  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DBROTLI_SHARED_COMPILATION -DCLI11_COMPILE -DCPPHTTPLIB_BROTLI_SUPPORT -DCPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO -DFMT_SHARED -ID:\\disktree\\include -external:ID:\\disktree\\build\\dev\\vcpkg_installed\\x64-windows\\include -external:W0 /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++latest -MDd -Zi /utf-8 @CMakeFiles\\disktree_core.dir\\src\\export\\csv_export.cpp.obj.modmap /FoCMakeFiles\\disktree_core.dir\\src\\export\\csv_export.cpp.obj /FdCMakeFiles\\disktree_core.dir\\disktree_core.pdb /FS -c D:\\disktree\\src\\export\\csv_export.cpp",
+  "file": "D:/disktree/src/export/csv_export.cpp",
+  "output": "D:/disktree/build/dev/CMakeFiles/disktree_core.dir/src/export/csv_export.cpp.obj"
+},
+{
+  "directory": "D:/disktree/build/dev",
   "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DBROTLI_SHARED_COMPILATION -DCLI11_COMPILE -DCPPHTTPLIB_BROTLI_SUPPORT -DCPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO -DFMT_SHARED -ID:\\disktree\\include -external:ID:\\disktree\\build\\dev\\vcpkg_installed\\x64-windows\\include -external:W0 /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++latest -MDd -Zi /utf-8 @CMakeFiles\\disktree.dir\\src\\main.cpp.obj.modmap /FoCMakeFiles\\disktree.dir\\src\\main.cpp.obj /FdCMakeFiles\\disktree.dir\\ /FS -c D:\\disktree\\src\\main.cpp",
   "file": "D:/disktree/src/main.cpp",
   "output": "D:/disktree/build/dev/CMakeFiles/disktree.dir/src/main.cpp.obj"
