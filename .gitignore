@@ -1,0 +1,37 @@
+# Build outputs
+build/
+out/
+
+# vcpkg installed packages (reproducible via vcpkg.json)
+vcpkg_installed/
+
+# VS Code
+.vscode/
+
+# Compiled artifacts
+*.exe
+*.obj
+*.lib
+*.dll
+*.pdb
+*.ilk
+*.exp
+
+# CMake generated
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+install_manifest.txt
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temp files
+*.tmp
+*.log
+phases.txt
+*.png
+.env.cmd
