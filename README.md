@@ -116,15 +116,17 @@ cmake --build --preset dev
 
 ## Architecture
 
+```text
+>>>>>>> 924a765 (Readme update)
 disktree/
 ├── include/disktree/
-│   ├── core/          # Scanner, Builder, Index, models
-│   ├── export/        # JSON, CSV exporters
-│   ├── interfaces/    # TUI (ftxui), Web (cpp-httplib)
-│   └── utils/         # ThreadPool, Progress, Humanize
-├── src/               # Implementations
-└── tests/             # Catch2 unit tests
-
+│   ├── core/        # Scanner, Builder, Index, models
+│   ├── export/      # JSON, CSV exporters
+│   ├── interfaces/  # TUI (ftxui), Web (cpp-httplib)
+│   └── utils/       # ThreadPool, Progress, Humanize
+├── src/             # Implementations
+└── tests/           # Catch2 unit tests
+```
 **Data flow:**
 Filesystem → Scanner → Builder → Index → Interface (CLI/TUI/Web)
 
