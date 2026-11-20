@@ -3,6 +3,9 @@
 #include <fmt/format.h>
 #include <cmath>
 #include <cassert>
+#include <cctype>
+#include <charconv>
+#include <string>
 
 namespace disktree::utils {
 
@@ -47,6 +50,57 @@ std::string format_pct(float fraction) {
     // Clamp to [0, 1] — floating point arithmetic can produce tiny negatives
     float clamped = std::fmax(0.0f, std::fmin(1.0f, fraction));
     return fmt::format("{:.1f}%", clamped * 100.0f);
+}
+
+std::string format_signed_bytes(int64_t bytes) {
+    if (bytes == 0) return "0 B";
+    uint64_t mag = bytes < 0 ? uint64_t(0) - uint64_t(bytes) : uint64_t(bytes);
+    return (bytes < 0 ? "-" : "+") + format_bytes(mag);
+}
+
+std::optional<uint64_t> parse_size(std::string_view text) {
+    auto is_space = [](char c) { return std::isspace(static_cast<unsigned char>(c)) != 0; };
+    while (!text.empty() && is_space(text.front())) text.remove_prefix(1);
+    while (!text.empty() && is_space(text.back()))  text.remove_suffix(1);
+    if (text.empty()) return std::nullopt;
+
+    // Split number / unit
+    size_t i = 0;
+    while (i < text.size() &&
+           (std::isdigit(static_cast<unsigned char>(text[i])) || text[i] == '.'))
+        ++i;
+    if (i == 0) return std::nullopt;
+
+    double value = 0.0;
+    std::string num(text.substr(0, i));
+    try {
+        size_t used = 0;
+        value = std::stod(num, &used);
+        if (used != num.size()) return std::nullopt;
+    } catch (...) {
+        return std::nullopt;
+    }
+
+    std::string unit;
+    for (char c : text.substr(i))
+        if (!is_space(c)) unit += char(std::toupper(static_cast<unsigned char>(c)));
+
+    // Normalise: "KIB" / "KB" / "K" → "K", "B" / "" → ""
+    if (unit.size() >= 3 && unit.ends_with("IB")) unit.resize(unit.size() - 2);
+    else if (unit.size() >= 2 && unit.back() == 'B') unit.pop_back();
+    else if (unit == "B") unit.clear();
+
+    double mult = 1.0;
+    if      (unit.empty()) mult = 1.0;
+    else if (unit == "K")  mult = 1024.0;
+    else if (unit == "M")  mult = 1024.0 * 1024.0;
+    else if (unit == "G")  mult = 1024.0 * 1024.0 * 1024.0;
+    else if (unit == "T")  mult = 1024.0 * 1024.0 * 1024.0 * 1024.0;
+    else return std::nullopt;
+
+    double bytes = value * mult;
+    if (bytes < 0.0 || bytes > 1.8e19) return std::nullopt;
+    return static_cast<uint64_t>(bytes + 0.5);
 }
 
 } // namespace disktree::utils

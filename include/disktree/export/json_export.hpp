@@ -9,11 +9,6 @@ namespace disktree::export_ {
 // Serialize full ScanResult to JSON string
 std::string to_json(const ScanResult& result, const Index& index);
 
-// Save snapshot to ~/.disktree/snapshots/
-std::filesystem::path save_snapshot(const ScanResult& result,
-                                    const Index& index);
-
-// Load snapshot from file, returns JSON string
-std::string load_snapshot(const std::filesystem::path& path);
+// Snapshots (for --snapshot / --diff) live in core/snapshot.hpp
 
 } // namespace disktree::export_

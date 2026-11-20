@@ -11,6 +11,9 @@
 #endif
 #include <queue>
 #include <string>
+#include <algorithm>
+
+#include "disktree/d3_js.hpp"   // generated at build time from third_party/d3
 
 using json = nlohmann::json;
 namespace hu = disktree::utils;
@@ -62,7 +65,7 @@ static std::string get_html() {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>disktree</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="/d3.min.js"></script>
 <style>
   :root {
     --bg-main: #0b0c10;
@@ -683,8 +686,16 @@ boot();
 
 // ── Server ────────────────────────────────────────────────────────
 
-int run(const ScanResult& result, const Index& index, uint16_t port) {
+int run(const ScanResult& result, const Index& index, uint16_t port,
+        bool open_browser) {
     httplib::Server srv;
+
+    // ── GET /d3.min.js — bundled D3 (no internet needed) ──────────
+    srv.Get("/d3.min.js", [](const httplib::Request&, httplib::Response& res) {
+        res.set_header("Cache-Control", "max-age=86400");
+        res.set_content(reinterpret_cast<const char*>(d3_min_js), d3_min_js_size,
+                        "application/javascript");
+    });
 
     // ── GET / — serve the frontend ────────────────────────────────
     srv.Get("/", [](const httplib::Request&, httplib::Response& res) {
@@ -695,7 +706,7 @@ int run(const ScanResult& result, const Index& index, uint16_t port) {
     srv.Get("/api/scan", [&](const httplib::Request&,
                               httplib::Response& res) {
         json j;
-        j["scan_path"]   = result.scan_path.string();
+        j["scan_path"]   = result.root ? result.root->path : result.scan_path.string();
         j["total_size"]  = result.total_size;
         j["total_files"] = result.total_files;
         j["total_dirs"]  = result.total_dirs;
@@ -748,9 +759,12 @@ int run(const ScanResult& result, const Index& index, uint16_t port) {
     // ── GET /api/top-files ────────────────────────────────────────
     srv.Get("/api/top-files", [&](const httplib::Request& req,
                                    httplib::Response& res) {
-        int n = 50;
-        if (req.has_param("n"))
-            n = std::stoi(req.get_param_value("n"));
+        size_t n = 50;
+        if (req.has_param("n")) {
+            try { n = size_t(std::max(0, std::stoi(req.get_param_value("n")))); }
+            catch (...) { n = 50; }
+        }
+        n = std::min<size_t>(n, 1000);
 
         json arr = json::array();
         for (const auto* f : index.top_files(n)) {
@@ -771,24 +785,55 @@ int run(const ScanResult& result, const Index& index, uint16_t port) {
         res.set_content("pong", "text/plain");
     });
 
-    // Open browser
-    std::string url = fmt::format("http://localhost:{}", port);
-    fmt::print("\n  disktree web UI\n");
-    fmt::print("  Open: {}\n", url);
-    fmt::print("  Press Ctrl+C to stop\n\n");
-
+    // Bind first (trying the next few ports if this one is taken),
+    // then open the browser, then serve.
 #ifdef _WIN32
-    ShellExecuteA(nullptr, "open", url.c_str(),
-                  nullptr, nullptr, SW_SHOWNORMAL);
-#elif __APPLE__
-    system(("open " + url).c_str());
-#else
-    system(("xdg-open " + url).c_str());
+    // httplib's default SO_REUSEADDR lets Windows bind a port another
+    // process is already listening on. Ask for exclusive use instead so
+    // a busy port fails to bind and we move on to the next one.
+    srv.set_socket_options([](socket_t sock) {
+        int yes = 1;
+        setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE,
+                   reinterpret_cast<const char*>(&yes), sizeof(yes));
+    });
 #endif
 
-    fmt::print("  Server running...\n");
-    srv.listen("localhost", port);
+    int bound = -1;
+    for (int p = port; p < int(port) + 20 && p <= 65535; ++p) {
+        if (srv.bind_to_port("127.0.0.1", p)) { bound = p; break; }
+        // A failed bind marks the server "decommissioned" and every later
+        // bind fails; stop() on a server that isn't running clears that flag.
+        srv.stop();
+    }
+    if (bound < 0) {
+        fmt::print(stderr, "\n  Error: could not open a port between {} and {}. "
+                   "Try --port <number>.\n", port, int(port) + 19);
+        return 1;
+    }
 
+    std::string url = fmt::format("http://127.0.0.1:{}", bound);
+    fmt::print("\n  disktree web UI\n");
+    if (bound != port)
+        fmt::print("  (port {} was busy, using {})\n", port, bound);
+    fmt::print("  Open: {}\n", url);
+    fmt::print("  Press Ctrl+C to stop\n\n");
+    std::fflush(stdout);
+
+    if (open_browser) {
+#ifdef _WIN32
+        ShellExecuteA(nullptr, "open", url.c_str(),
+                      nullptr, nullptr, SW_SHOWNORMAL);
+#elif __APPLE__
+        std::system(("open " + url).c_str());
+#else
+        std::system(("xdg-open " + url + " >/dev/null 2>&1 &").c_str());
+#endif
+    }
+
+    if (!srv.listen_after_bind()) {
+        fmt::print(stderr, "  Error: web server stopped unexpectedly\n");
+        return 1;
+    }
     return 0;
 }
 

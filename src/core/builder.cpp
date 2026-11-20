@@ -89,12 +89,13 @@ void Builder::sort_children(DirNode* root) {
 
         std::sort(node->child_dirs.begin(), node->child_dirs.end(),
             [](const DirNode* a, const DirNode* b){
-                return a->size > b->size;
+                // name tie-break keeps output stable across parallel scans
+                return a->size != b->size ? a->size > b->size : a->name < b->name;
             });
 
         std::sort(node->child_files.begin(), node->child_files.end(),
             [](const FileNode* a, const FileNode* b){
-                return a->size > b->size;
+                return a->size != b->size ? a->size > b->size : a->name < b->name;
             });
 
         for (auto* child : node->child_dirs)

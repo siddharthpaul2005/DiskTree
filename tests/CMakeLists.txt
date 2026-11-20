@@ -1,5 +1,8 @@
 add_executable(disktree_tests
     unit/test_humanize.cpp
+    unit/test_scan.cpp
+    unit/test_snapshot.cpp
+    unit/test_export_utils.cpp
 )
 
 target_link_libraries(disktree_tests

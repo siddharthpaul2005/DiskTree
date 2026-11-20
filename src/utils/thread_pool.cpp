@@ -29,8 +29,12 @@ ThreadPool::ThreadPool(size_t n_threads) {
                 // Execute outside the lock so other threads can grab tasks
                 task();
 
-                // Decrement pending count and notify wait_all()
+                // Decrement pending count and notify wait_all().
+                // Take the lock before notifying: otherwise wait_all()
+                // could check the predicate, get preempted, miss this
+                // notification and sleep forever (lost wake-up).
                 if (_pending.fetch_sub(1) == 1) {
+                    std::lock_guard<std::mutex> lock(_mtx);
                     _cv_done.notify_all();
                 }
             }

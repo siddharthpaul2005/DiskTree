@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-2022
@@ -15,24 +18,33 @@ jobs:
       - name: Install vcpkg
         run: |
           git clone https://github.com/microsoft/vcpkg.git C:\vcpkg
-          C:\vcpkg\bootstrap-vcpkg.bat
+          C:\vcpkg\bootstrap-vcpkg.bat -disableMetrics
           echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Configure
         run: cmake --preset release-static
-        env:
-          VCPKG_ROOT: C:\vcpkg
 
       - name: Build
         run: cmake --build --preset release-static
-        env:
-          VCPKG_ROOT: C:\vcpkg
 
-      - name: Rename binary
-        run: copy build\release\disktree.exe disktree-windows-x64.exe
+      - name: Test
+        run: ctest --preset release-static
+
+      - name: Package
+        run: |
+          copy build\release\disktree.exe disktree-windows-x64.exe
+          $hash = (Get-FileHash disktree-windows-x64.exe -Algorithm SHA256).Hash.ToLower()
+          Set-Content -Path disktree-windows-x64.exe.sha256 -Value $hash -NoNewline
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: disktree-windows-x64.exe
+          files: |
+            disktree-windows-x64.exe
+            disktree-windows-x64.exe.sha256
           generate_release_notes: true

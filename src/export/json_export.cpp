@@ -44,7 +44,7 @@ static json node_to_json(const DirNode* node, int depth_limit, int cur = 0) {
 
 std::string to_json(const ScanResult& result, const Index& index) {
     json j;
-    j["scan_path"]   = result.scan_path.string();
+    j["scan_path"]   = result.root ? result.root->path : result.scan_path.string();
     j["total_size"]  = result.total_size;
     j["total_files"] = result.total_files;
     j["total_dirs"]  = result.total_dirs;
@@ -77,33 +77,6 @@ std::string to_json(const ScanResult& result, const Index& index) {
     j["tree"] = node_to_json(result.root, 4);
 
     return j.dump(2);
-}
-
-fs::path save_snapshot(const ScanResult& result, const Index& index) {
-    // Create snapshot directory
-    auto home = fs::path(std::getenv("USERPROFILE") ?
-                         std::getenv("USERPROFILE") :
-                         std::getenv("HOME"));
-    auto snap_dir = home / ".disktree" / "snapshots";
-    fs::create_directories(snap_dir);
-
-    // Filename: timestamp
-    auto now = std::chrono::system_clock::now();
-    auto t   = std::chrono::system_clock::to_time_t(now);
-    std::ostringstream ss;
-    ss << std::put_time(std::localtime(&t), "%Y%m%d_%H%M%S");
-    auto snap_path = snap_dir / (ss.str() + ".json");
-
-    std::ofstream f(snap_path);
-    f << to_json(result, index);
-    return snap_path;
-}
-
-std::string load_snapshot(const fs::path& path) {
-    std::ifstream f(path);
-    if (!f) throw std::runtime_error("Cannot open snapshot: " + path.string());
-    return std::string(std::istreambuf_iterator<char>(f),
-                       std::istreambuf_iterator<char>());
 }
 
 } // namespace disktree::export_

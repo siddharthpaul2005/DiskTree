@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <memory>
 #include <cstddef>
+#include <mutex>
 
 namespace disktree {
 
@@ -27,6 +28,9 @@ namespace disktree {
 //   Objects are placement-new'd into the current slab.
 //   When a slab fills up, we allocate a new one.
 //   No individual deallocation — entire arena freed at once.
+//
+// Thread safety: all public members are safe to call concurrently
+// (the parallel scanner allocates from several worker threads).
 // ════════════════════════════════════════════════════════════════
 class ScanArena {
 public:
@@ -47,8 +51,8 @@ public:
 
     // Stats for debugging
     size_t total_allocated_bytes() const;
-    size_t file_node_count()       const { return _file_count; }
-    size_t dir_node_count()        const { return _dir_count;  }
+    size_t file_node_count()       const { std::lock_guard l(_mtx); return _file_count; }
+    size_t dir_node_count()        const { std::lock_guard l(_mtx); return _dir_count;  }
 
     // Non-copyable: owns raw memory
     ScanArena(const ScanArena&)            = delete;
@@ -65,12 +69,19 @@ private:
             , capacity(cap) {}
     };
 
-    void* alloc_raw(size_t size, size_t alignment);
+    void* alloc_raw(size_t size, size_t alignment);  // caller holds _mtx
     void  new_slab();
+
+    mutable std::mutex        _mtx;
 
     size_t                    _slab_size;
     std::vector<Slab>         _slabs;
     std::unordered_map<std::string, std::string_view> _intern_table;
+
+    // Every node constructed in the slabs, so the destructor can run
+    // ~FileNode / ~DirNode (they own std::string and std::vector members).
+    std::vector<FileNode*>    _files;
+    std::vector<DirNode*>     _dirs;
 
     size_t _file_count = 0;
     size_t _dir_count  = 0;

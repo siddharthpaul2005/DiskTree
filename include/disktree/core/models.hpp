@@ -205,6 +205,8 @@ struct DiffResult {
     std::vector<FileDelta>  removed;    // deleted files
     std::vector<FileDelta>  grown;      // existing files that got bigger
     std::vector<FileDelta>  shrunk;     // existing files that got smaller
+    std::vector<FileDelta>  dirs;       // top-level entries whose total changed
+    uint64_t                unchanged   = 0;  // files present in both, same size
     int64_t                 net_delta   = 0;  // positive = disk grew
     double                  elapsed_sec = 0.0;
 };

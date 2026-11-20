@@ -49,13 +49,13 @@ void Index::build(const ScanResult& result) {
     // Sort files by size descending
     std::sort(_files_by_size.begin(), _files_by_size.end(),
         [](const FileNode* a, const FileNode* b){
-            return a->size > b->size;
+            return a->size != b->size ? a->size > b->size : a->path < b->path;
         });
 
     // Sort dirs by size descending
     std::sort(_dirs_by_size.begin(), _dirs_by_size.end(),
         [](const DirNode* a, const DirNode* b){
-            return a->size > b->size;
+            return a->size != b->size ? a->size > b->size : a->path < b->path;
         });
 
     // Build ext_stats vector sorted by total bytes
@@ -65,7 +65,8 @@ void Index::build(const ScanResult& result) {
 
     std::sort(_ext_stats.begin(), _ext_stats.end(),
         [](const ExtStat& a, const ExtStat& b){
-            return a.total_bytes > b.total_bytes;
+            return a.total_bytes != b.total_bytes ? a.total_bytes > b.total_bytes
+                                                  : a.ext < b.ext;
         });
 }
 

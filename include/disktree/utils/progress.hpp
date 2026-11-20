@@ -2,23 +2,21 @@
 
 #include "disktree/core/models.hpp"
 #include <atomic>
-#include <functional>
-#include <string>
+#include <condition_variable>
+#include <cstdio>
 #include <mutex>
+#include <string>
+#include <thread>
 
 namespace disktree::utils {
 
 // ════════════════════════════════════════════════════════════════
 // ProgressTracker
-// Thread-safe progress reporting from scanner worker threads
-// to the UI thread.
+// Thread-safe progress counters written by scanner worker threads
+// and read by whoever displays progress.
 //
-// Scanner workers update atomic counters directly (lock-free).
-// The UI thread calls snapshot() periodically to get a
-// consistent view for display.
-//
-// Current path is stored separately with a mutex because
-// std::string is not atomically updatable.
+// Workers update atomic counters directly (lock-free). The current
+// path is a std::string, so it is guarded by a mutex instead.
 // ════════════════════════════════════════════════════════════════
 class ProgressTracker {
 public:
@@ -41,7 +39,7 @@ public:
         _phase.store(phase, std::memory_order_relaxed);
     }
 
-    // Called by UI thread — takes a consistent snapshot
+    // Called by the display thread
     ScanProgress snapshot() const {
         ScanProgress p;
         p.files_scanned = _files.load(std::memory_order_relaxed);
@@ -51,15 +49,9 @@ public:
         return p;
     }
 
-    // Optional callback: called every N files from worker threads
-    // Must be thread-safe if set
-    std::function<void(ScanProgress)> on_progress;
-
-    void maybe_emit(uint64_t every_n = 5000) {
-        uint64_t files = _files.load(std::memory_order_relaxed);
-        if (on_progress && (files % every_n == 0)) {
-            on_progress(snapshot());
-        }
+    std::string current_path() const {
+        std::lock_guard<std::mutex> lock(_path_mtx);
+        return _current_path;
     }
 
 private:
@@ -70,6 +62,44 @@ private:
 
     mutable std::mutex     _path_mtx;
     std::string            _current_path;
+};
+
+// ════════════════════════════════════════════════════════════════
+// ProgressReporter
+// RAII live progress line. Starts a background thread that redraws
+//   "  123,456 files  12.3 GB  ...\current\path"
+// on a single console line every `interval_ms`, so the scanner's
+// worker threads never print anything themselves. stop() (or the
+// destructor) erases the line.
+// ════════════════════════════════════════════════════════════════
+class ProgressReporter {
+public:
+    explicit ProgressReporter(const ProgressTracker& tracker,
+                              std::FILE* out = stderr,
+                              int interval_ms = 120);
+    ~ProgressReporter();
+
+    void stop();
+
+    ProgressReporter(const ProgressReporter&)            = delete;
+    ProgressReporter& operator=(const ProgressReporter&) = delete;
+
+    // Width of the progress line in characters (exposed for tests).
+    static constexpr size_t LINE_WIDTH = 100;
+
+    // Builds the text shown for a snapshot (no \r, padded to LINE_WIDTH).
+    static std::string format_line(const ScanProgress& p, const std::string& path);
+
+private:
+    void draw();
+
+    const ProgressTracker&  _tracker;
+    std::FILE*              _out;
+    int                     _interval_ms;
+    std::mutex              _mtx;
+    std::condition_variable _cv;
+    bool                    _stopping = false;
+    std::thread             _thread;
 };
 
 } // namespace disktree::utils

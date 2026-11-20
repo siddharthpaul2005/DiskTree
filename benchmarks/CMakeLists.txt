@@ -1,0 +1,2 @@
+add_executable(disktree_bench bench_scan.cpp)
+target_link_libraries(disktree_bench PRIVATE disktree_core)
