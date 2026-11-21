@@ -43,7 +43,13 @@ ThreadPool::ThreadPool(size_t n_threads) {
 }
 
 ThreadPool::~ThreadPool() {
-    _stop.store(true);
+    {
+        // Set the flag under the lock: a worker that has just checked the
+        // wait predicate but not yet gone to sleep would otherwise miss the
+        // notification below and block forever, hanging join().
+        std::lock_guard<std::mutex> lock(_mtx);
+        _stop.store(true);
+    }
     _cv.notify_all();      // wake all workers so they can exit
     for (auto& w : _workers)
         if (w.joinable()) w.join();

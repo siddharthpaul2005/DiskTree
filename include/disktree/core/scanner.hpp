@@ -12,6 +12,8 @@
 #include <mutex>
 #include <atomic>
 #include <cstdint>
+#include <array>
+#include <unordered_set>
 
 namespace disktree {
 
@@ -37,6 +39,9 @@ public:
         // Names to skip (matched against the file/dir name, not the
         // full path). Case-insensitive; supports * and ? wildcards.
         std::vector<std::string> exclude_patterns;
+        // Optional: set to true from another thread to stop the scan early.
+        // The partial result is returned with ScanResult::cancelled = true.
+        const std::atomic<bool>* cancel = nullptr;
     };
 
     // The names skipped when the user doesn't pass --no-default-excludes
@@ -65,6 +70,24 @@ private:
         std::atomic<uint64_t>             total_files{0};
         std::atomic<uint64_t>             total_dirs{0};
         std::atomic<uint64_t>             total_bytes{0};
+        // Space the files really take on disk (cluster-rounded, compressed,
+        // hard links counted once). Equals total_bytes where unknown.
+        std::atomic<uint64_t>             total_allocated{0};
+
+        // File ids already counted toward total_allocated, sharded by hash
+        // so worker threads rarely contend. Only used where ids exist.
+        struct IdShard {
+            std::mutex                                       mtx;
+            std::unordered_set<uint64_t>                     ids;
+        };
+        std::array<IdShard, 64>           seen_ids;
+
+        // true the first time a file id is seen
+        bool first_sighting(uint64_t id) {
+            auto& s = seen_ids[(id * 0x9E3779B97F4A7C15ull) >> 58];
+            std::lock_guard<std::mutex> lock(s.mtx);
+            return s.ids.insert(id).second;
+        }
     };
 
     void scan_directory(const std::filesystem::path& path,

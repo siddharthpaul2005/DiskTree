@@ -33,17 +33,26 @@ desktop.ini
 *.tmp
 *.log
 phases.txt
-*.png
 .env.cmd
 
 # Junk files
 phases.txt
 progressofprohext.txt
-*.csv
-*.json
-!vcpkg.json
-!packaging/scoop/disktree.json
+# Exports and screenshots dropped in the repo root only
+/*.csv
+/*.json
+/*.png
+!/vcpkg.json
+!/CMakePresets.json
 Screenshot*
 .env.cmd
 compile_commands.json
 disktree_export*
+# Desktop app (app/)
+app/node_modules/
+app/dist/
+app/test-results/
+app/playwright-report/
+app/src-tauri/target/
+app/src-tauri/gen/
+app/src-tauri/binaries/

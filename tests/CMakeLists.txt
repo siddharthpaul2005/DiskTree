@@ -3,6 +3,7 @@ add_executable(disktree_tests
     unit/test_scan.cpp
     unit/test_snapshot.cpp
     unit/test_export_utils.cpp
+    unit/test_service.cpp
 )
 
 target_link_libraries(disktree_tests

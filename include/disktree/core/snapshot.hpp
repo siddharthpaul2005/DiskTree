@@ -45,6 +45,10 @@ struct Snapshot {
     std::unordered_map<std::string, SnapshotEntry> files;
 };
 
+// Lower-case, '/' -> '\', no trailing separator (except "c:\\").
+// Used to decide whether two scans are of the same path.
+std::string normalise_scan_path(std::string_view path);
+
 // Build a snapshot from a completed (Builder-processed) scan
 Snapshot snapshot_from_scan(const ScanResult& result);
 

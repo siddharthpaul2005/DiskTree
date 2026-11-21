@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(disktree VERSION 1.0.0 LANGUAGES CXX)
+project(disktree VERSION 1.1.0 LANGUAGES CXX)
 
 # Static MSVC runtime only for the static triplet (single shippable .exe).
 # The dev preset uses vcpkg's dynamic x64-windows triplet, whose libraries
@@ -32,6 +32,7 @@ find_package(fmt           CONFIG REQUIRED)
 find_package(ftxui         CONFIG REQUIRED)
 find_package(zstd          CONFIG REQUIRED)
 find_package(httplib       CONFIG REQUIRED)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
 # ── Embedded web assets (so the web UI works offline) ────────────
 set(DISKTREE_GEN_DIR ${CMAKE_BINARY_DIR}/generated)
@@ -57,6 +58,10 @@ add_library(disktree_core STATIC
     src/core/builder.cpp
     src/core/index.cpp
     src/core/snapshot.cpp
+    src/core/snapshot_store.cpp
+    src/platform/drives.cpp
+    src/service/engine.cpp
+    src/service/api_server.cpp
     src/export/json_export.cpp
     src/export/csv_export.cpp
     src/interfaces/tui/app.cpp
@@ -82,13 +87,14 @@ target_link_libraries(disktree_core
         ftxui::dom
         ftxui::component
         httplib::httplib
+        unofficial::sqlite3::sqlite3
         $<IF:$<TARGET_EXISTS:zstd::libzstd_shared>,
             zstd::libzstd_shared,
             zstd::libzstd_static>
 )
 
 if(WIN32)
-    target_link_libraries(disktree_core PUBLIC shell32)
+    target_link_libraries(disktree_core PUBLIC shell32 ole32)
 endif()
 
 # ── Executable ──────────────────────────────────────────────────

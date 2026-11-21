@@ -31,8 +31,7 @@ static fs::path str_to_path(const std::string& s) {
     return fs::path(std::u8string(reinterpret_cast<const char8_t*>(s.data()), s.size()));
 }
 
-// Lower-case, '/' → '\', no trailing separator: used to compare scan roots
-static std::string normalise_root(std::string_view p) {
+std::string normalise_scan_path(std::string_view p) {
     std::string out;
     out.reserve(p.size());
     for (char c : p)
@@ -262,11 +261,11 @@ std::vector<fs::path> list_snapshots(const fs::path& dir) {
 }
 
 std::optional<fs::path> latest_snapshot_for(const fs::path& dir, std::string_view scan_path) {
-    std::string want = normalise_root(scan_path);
+    std::string want = normalise_scan_path(scan_path);
     for (const auto& p : list_snapshots(dir)) {
         try {
             Snapshot s = load_snapshot(p);
-            if (normalise_root(s.scan_path) == want) return p;
+            if (normalise_scan_path(s.scan_path) == want) return p;
         } catch (...) {
             // unreadable / legacy snapshot: skip it
         }

@@ -1,6 +1,6 @@
 {
   "name": "disktree",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "builtin-baseline": "9b965a116838c6cdcd36bca60d1b81b030c8ab8d",
   "dependencies": [
     "cli11",
@@ -9,6 +9,7 @@
     "ftxui",
     "zstd",
     "cpp-httplib",
-    "catch2"
+    "catch2",
+    "sqlite3"
   ]
 }

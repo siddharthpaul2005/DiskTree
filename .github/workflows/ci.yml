@@ -25,11 +25,47 @@ jobs:
         with:
           arch: x64
 
-      - name: Configure
-        run: cmake --preset dev
+      # ── Engine (C++) ─────────────────────────────────────────────
+      - name: Configure engine
+        run: cmake --preset release-static
 
-      - name: Build
-        run: cmake --build --preset dev
+      - name: Build engine
+        run: cmake --build --preset release-static
 
-      - name: Test
-        run: ctest --preset dev
+      - name: Test engine
+        run: ctest --preset release-static
+
+      # ── Desktop app (TypeScript + Rust) ──────────────────────────
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: app/src-tauri
+
+      - name: Install app dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Type-check and build UI
+        working-directory: app
+        run: npm run build
+
+      - name: UI unit tests
+        working-directory: app
+        run: npm test
+
+      - name: End-to-end tests (real engine + Edge)
+        working-directory: app
+        run: npx playwright test
+
+      - name: Compile desktop shell
+        working-directory: app
+        run: |
+          npm run sidecar
+          cargo build --manifest-path src-tauri/Cargo.toml --release

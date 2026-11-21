@@ -202,3 +202,22 @@ TEST_CASE("matches_pattern", "[scan][pattern]") {
     REQUIRE_FALSE(Scanner::matches_pattern("file?.txt", "file12.txt"));
     REQUIRE_FALSE(Scanner::matches_pattern(".git", ".github"));
 }
+
+TEST_CASE("scan: on-disk total counts a hard-linked file once", "[scan]") {
+    TempTree t;
+    t.file("a/big.bin", 1 << 20);
+    std::error_code ec;
+    std::filesystem::create_hard_link(t.path() / "a" / "big.bin", t.path() / "b.bin", ec);
+    if (ec) SKIP("file system has no hard links");
+
+    auto s = scan_and_build(t.path(), default_cfg());
+    // Listed under both names, the way File Explorer counts them...
+    REQUIRE(s->result.total_size == 2u * (1u << 20));
+    // ...but stored once
+#ifdef _WIN32
+    REQUIRE(s->result.total_allocated >= (1u << 20));
+    REQUIRE(s->result.total_allocated < 2u * (1u << 20));
+#else
+    REQUIRE(s->result.total_allocated == s->result.total_size);
+#endif
+}

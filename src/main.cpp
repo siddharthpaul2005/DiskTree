@@ -15,6 +15,8 @@
 #include "disktree/core/builder.hpp"
 #include "disktree/core/index.hpp"
 #include "disktree/core/snapshot.hpp"
+#include "disktree/core/snapshot_store.hpp"
+#include "disktree/service/api_server.hpp"
 #include "disktree/utils/humanize.hpp"
 #include "disktree/utils/progress.hpp"
 #include "disktree/export/json_export.hpp"
@@ -31,6 +33,7 @@
 #include <ctime>
 #include <fstream>
 #include <functional>
+#include <memory>
 #include <optional>
 #include <span>
 #include <thread>
@@ -344,26 +347,37 @@ static void render_diff(const disktree::Snapshot& before, const disktree::DiffRe
     render_delta_list("Shrunk files",  d.shrunk,  n, green);
 }
 
-static void list_snapshots_cmd(const std::filesystem::path& dir) {
-    auto snaps = disktree::list_snapshots(dir);
-    fmt::print(S(fmt::emphasis::bold), "\n  Snapshots in {}\n", dir.string());
+static void list_snapshots_cmd(const disktree::SnapshotStore& store) {
+    auto snaps = store.list();
+    fmt::print(S(fmt::emphasis::bold), "\n  Snapshots in {}\n", store.path().string());
     if (snaps.empty()) {
         fmt::print("  (none yet - create one with: disktree <path> --snapshot)\n\n");
         return;
     }
-    fmt::print("  {:<26} {:<17} {:>12} {:>10}  {}\n", "File", "Taken", "Size", "Files", "Scanned path");
+    fmt::print("  {:>5}  {:<17} {:>12} {:>10}  {}\n", "Id", "Taken", "Size", "Files", "Scanned path");
     fmt::print("  {}\n", std::string(90, '-'));
-    for (const auto& p : snaps) {
-        try {
-            auto s = disktree::load_snapshot(p);
-            fmt::print("  {:<26} {:<17} {:>12} {:>10}  {}\n", p.filename().string(),
-                format_date(s.created_at), hu::format_bytes(s.total_size),
-                hu::format_count(s.total_files), s.scan_path);
-        } catch (const std::exception& e) {
-            fmt::print("  {:<26} (unreadable: {})\n", p.filename().string(), e.what());
-        }
+    for (const auto& s : snaps) {
+        fmt::print("  {:>5}  {:<17} {:>12} {:>10}  {}{}\n", s.id,
+            format_date(s.created_at), hu::format_bytes(s.total_size),
+            hu::format_count(s.total_files), s.scan_path,
+            s.label.empty() ? "" : "  (" + s.label + ")");
     }
-    fmt::print("\n");
+    fmt::print("\n  Compare with one: disktree <path> --diff <id>   (or --diff latest)\n\n");
+}
+
+// `disktree serve`: the local API the desktop app talks to
+static int run_serve(uint16_t port, const std::string& token, uint32_t parent_pid,
+                     const std::string& db) {
+    disktree::service::Engine::Options eo;
+    if (!db.empty()) eo.db_path = db;
+    disktree::service::Engine engine(eo);
+
+    disktree::service::ServerOptions so;
+    so.port            = port;
+    so.token           = token;
+    so.parent_pid      = parent_pid;
+    so.allowed_origins = disktree::service::default_allowed_origins();
+    return disktree::service::run_api_server(engine, so);
 }
 
 static std::string normalise_ext(std::string ext) {
@@ -438,9 +452,9 @@ int main(int argc, char** argv) {
        ->check(CLI::IsMember({"json", "csv"}));
     app.add_option("-o,--output", output_path, "Export file path (default: disktree_export.<fmt>)");
     app.add_flag("--no-tree", no_tree, "Skip the tree view");
-    app.add_flag("--snapshot", snapshot, "Save the scan to ~/.disktree/snapshots for later --diff");
+    app.add_flag("--snapshot", snapshot, "Save the scan as a snapshot for later --diff");
     app.add_option("--diff", diff_path,
-       "Compare against a snapshot file, or 'latest' for the newest snapshot of this path");
+       "Compare with a snapshot: its id, 'latest' (newest of this path), or a .json.zst file");
     app.add_flag("--list-snapshots", list_snaps, "List saved snapshots and exit");
     app.add_flag("--tui", tui_mode, "Launch the interactive terminal UI");
     app.add_flag("--web", web_mode, "Launch the web UI in your browser");
@@ -448,12 +462,38 @@ int main(int argc, char** argv) {
        ->default_val(7821);
     app.add_flag("--no-browser", no_browser, "With --web: don't open a browser automatically");
 
+    // ── `disktree serve` (used by the desktop app) ─────────────────
+    uint16_t    serve_port = 0;
+    std::string serve_token;
+    uint32_t    serve_parent = 0;
+    std::string serve_db;
+    auto* serve = app.add_subcommand("serve", "Run the local API used by the DiskTree desktop app");
+    serve->add_option("--port", serve_port, "Port on 127.0.0.1 (0 = any free port)")->default_val(0);
+    serve->add_option("--token", serve_token, "Require this token on every request");
+    serve->add_option("--parent-pid", serve_parent, "Exit when this process exits");
+    serve->add_option("--db", serve_db, "Snapshot database path");
+
     CLI11_PARSE(app, argc, argv);
 
+    if (serve->parsed()) {
+        try {
+            return run_serve(serve_port, serve_token, serve_parent, serve_db);
+        } catch (const std::exception& e) {
+            std::fprintf(stderr, "{\"event\":\"error\",\"message\":\"%s\"}\n", e.what());
+            return 1;
+        }
+    }
+
     try {
-        auto snap_dir = disktree::default_snapshot_dir();
+        std::unique_ptr<disktree::SnapshotStore> store_ptr;
+        auto store = [&]() -> disktree::SnapshotStore& {
+            if (!store_ptr)
+                store_ptr = std::make_unique<disktree::SnapshotStore>(
+                    disktree::SnapshotStore::default_path());
+            return *store_ptr;
+        };
         if (list_snaps) {
-            list_snapshots_cmd(snap_dir);
+            list_snapshots_cmd(store());
             return 0;
         }
         if (tui_mode && web_mode)
@@ -501,17 +541,22 @@ int main(int argc, char** argv) {
         // ── Diff target (resolved before a new snapshot is written) ──
         std::optional<disktree::Snapshot> diff_base;
         if (!diff_path.empty()) {
-            std::filesystem::path p = diff_path;
+            std::string id_text = diff_path;
+            if (!id_text.empty() && id_text[0] == '#') id_text.erase(0, 1);
+            bool is_id = !id_text.empty() &&
+                         std::all_of(id_text.begin(), id_text.end(),
+                                     [](unsigned char c) { return std::isdigit(c); });
             if (diff_path == "latest") {
-                auto latest = disktree::latest_snapshot_for(snap_dir, result.root->path);
+                auto latest = store().latest_for(result.root->path);
                 if (!latest)
                     throw std::runtime_error("No snapshot of " + result.root->path +
                         " yet. Create one first with: disktree \"" + path + "\" --snapshot");
-                p = *latest;
-            } else if (!std::filesystem::exists(p) && std::filesystem::exists(snap_dir / p)) {
-                p = snap_dir / p;   // allow just the file name
+                diff_base = store().load(*latest);
+            } else if (is_id && !std::filesystem::exists(diff_path)) {
+                diff_base = store().load(std::stoll(id_text));
+            } else {
+                diff_base = disktree::load_snapshot(diff_path);   // older .json.zst file
             }
-            diff_base = disktree::load_snapshot(p);
         }
 
         // ── Export / snapshot ─────────────────────────────────────────
@@ -528,8 +573,8 @@ int main(int argc, char** argv) {
                 fmt::print("  Exported to: {}\n", out);
             }
             if (snapshot) {
-                auto saved = disktree::save_snapshot(disktree::snapshot_from_scan(result), snap_dir);
-                fmt::print("  Snapshot saved: {}\n", saved.string());
+                auto id = store().save(disktree::snapshot_from_scan(result));
+                fmt::print("  Snapshot #{} saved ({})\n", id, store().path().string());
             }
         };
 

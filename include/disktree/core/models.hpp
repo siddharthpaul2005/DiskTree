@@ -149,8 +149,13 @@ struct ScanResult {
     uint64_t    total_size  = 0;
     uint64_t    total_files = 0;
     uint64_t    total_dirs  = 0;
+    // Bytes the scanned files occupy on disk: cluster rounding, NTFS
+    // compression and hard links (counted once) included. Windows only;
+    // elsewhere it equals the files' sizes.
+    uint64_t    total_allocated = 0;
 
     std::vector<ScanError>  skipped;
+    bool                    cancelled = false;  // stopped early via Config::cancel
     std::string             platform;   // "windows", "linux", "macos"
 
     // Arena owns ALL FileNode and DirNode memory.

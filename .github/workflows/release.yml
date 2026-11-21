@@ -26,6 +26,7 @@ jobs:
         with:
           arch: x64
 
+      # ── Engine ───────────────────────────────────────────────────
       - name: Configure
         run: cmake --preset release-static
 
@@ -35,16 +36,47 @@ jobs:
       - name: Test
         run: ctest --preset release-static
 
+      # ── Desktop app ──────────────────────────────────────────────
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install app dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: UI tests
+        working-directory: app
+        run: |
+          npm test
+          npx playwright test
+
+      - name: Build installers
+        working-directory: app
+        run: |
+          npm run sidecar
+          npx tauri build
+
+      # ── Collect artefacts ────────────────────────────────────────
       - name: Package
         run: |
-          copy build\release\disktree.exe disktree-windows-x64.exe
-          $hash = (Get-FileHash disktree-windows-x64.exe -Algorithm SHA256).Hash.ToLower()
-          Set-Content -Path disktree-windows-x64.exe.sha256 -Value $hash -NoNewline
+          $version = "${{ github.ref_name }}".TrimStart("v")
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item build\release\disktree.exe dist\disktree-windows-x64.exe
+          Copy-Item (Get-ChildItem app\src-tauri\target\release\bundle\nsis\*-setup.exe | Select-Object -First 1).FullName "dist\DiskTree-$version-setup.exe"
+          Copy-Item (Get-ChildItem app\src-tauri\target\release\bundle\msi\*.msi | Select-Object -First 1).FullName "dist\DiskTree-$version-x64.msi"
+          Get-ChildItem dist | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower()
+            Set-Content -Path "$($_.FullName).sha256" -Value $hash -NoNewline
+          }
+          Get-ChildItem dist
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            disktree-windows-x64.exe
-            disktree-windows-x64.exe.sha256
+          files: dist/*
           generate_release_notes: true
